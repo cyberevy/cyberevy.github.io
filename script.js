@@ -1,4 +1,27 @@
 // script.js
+let vantaEffect = null;
+
+// Load VANTA effect on boot screen with custom values
+window.addEventListener('DOMContentLoaded', () => {
+  vantaEffect = VANTA.HALO({
+    el: "#boot",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    baseColor: 0x330059,
+    backgroundColor: 0x000000,
+    amplitudeFactor: 1.0,
+    xOffset: 0.0,
+    yOffset: 0.0,
+    size: 1.0,
+    speed: 1.0,
+    scale: 1.0,
+    scaleMobile: 1.0
+  });
+});
+
 const bootLines = [
   "booting cyberevy://_system",
   "> Initializing terminal...",
@@ -33,6 +56,9 @@ function typeLine() {
 }
 
 function showMain() {
+  if (vantaEffect && typeof vantaEffect.destroy === 'function') {
+    vantaEffect.destroy();
+  }
   document.getElementById('boot').style.display = 'none';
   const main = document.getElementById('main');
   main.classList.add('fade-in');
@@ -43,6 +69,8 @@ function showMain() {
 
   typeDynamic("cyberevy", "title", 100, () => {
     typeDynamic("ethical hacker, I break systems for fun, legally!", "subtitle", 30, () => {
+      const prompt = document.getElementById("prompt");
+      prompt.style.display = "block";
       typeDynamic("cyberevy@core:~$", "prompt", 50);
     });
   });
