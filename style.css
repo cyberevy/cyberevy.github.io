@@ -1,23 +1,38 @@
 /* style.css */
 body {
   margin: 0;
+  height: 100vh;
+  overflow: hidden;
   background: #000;
+  position: relative;
+  cursor: auto;
+  font-family: 'Share Tech Mono', monospace;
   background-image: repeating-linear-gradient(180deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 4px), repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 4px);
   background-color: #0d001a;
-  height: 100vh;
-  font-family: 'Share Tech Mono', monospace;
-  overflow: hidden;
-  cursor: auto;
-  animation: glitch-bg 1s infinite steps(2, jump-none);
+  animation: glitchBG 3s infinite alternate;
 }
 
-@keyframes glitch-bg {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 5px 5px;
-  }
+body::before {
+  content: "";
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255,255,255,0.02) 0,
+    rgba(255,255,255,0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes glitchBG {
+  0% { background-position: 0 0; filter: hue-rotate(0deg); }
+  25% { filter: hue-rotate(5deg) blur(0.5px); }
+  50% { background-position: -10px -10px; filter: hue-rotate(0deg); }
+  75% { filter: hue-rotate(-5deg) blur(0.5px); }
+  100% { background-position: 0 0; filter: hue-rotate(0deg); }
 }
 
 #boot {
@@ -26,7 +41,7 @@ body {
   align-items: center;
   text-align: left;
   height: 100vh;
-  color: #00ffee; /* restored original turquoise */
+  color: #00ffee;
   font-size: 1.2rem;
   white-space: pre-wrap;
   padding: 2rem;
@@ -134,8 +149,4 @@ body {
 @font-face {
   font-family: 'Terminal';
   src: local('Courier New');
-}
-
-#keyfx {
-  display: none;
 }
