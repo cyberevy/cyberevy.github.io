@@ -14,7 +14,7 @@ body {
   align-items: center;
   text-align: left;
   height: 100vh;
-  color: #00ffee;
+  color: #4b0082; /* darker purple */
   font-size: 1.2rem;
   white-space: pre-wrap;
   padding: 2rem;
@@ -32,7 +32,7 @@ body {
 #cursor {
   display: inline-block;
   width: 1ch;
-  background: #00ffee;
+  background: #4b0082;
   animation: blink 0.8s step-end infinite;
   margin-left: 2px;
 }
@@ -116,4 +116,14 @@ body {
   content: '_';
   animation: blink 1s step-end infinite;
   margin-left: 5px;
+}
+
+/* Sound effect added for key press */
+@font-face {
+  font-family: 'Terminal';
+  src: local('Courier New');
+}
+
+#keyfx {
+  display: none;
 }
