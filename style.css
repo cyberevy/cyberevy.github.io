@@ -99,7 +99,9 @@ body::before {
   background: #00ffee;
   animation: blink 0.8s step-end infinite;
   margin-left: 2px;
-  vertical-align: bottom;
+  vertical-align: baseline;
+  position: relative;
+  top: 0.1em;
 }
 
 @keyframes flicker {
@@ -181,7 +183,9 @@ body::before {
   content: '_';
   animation: blink 1s step-end infinite;
   margin-left: 5px;
-  vertical-align: bottom;
+  vertical-align: baseline;
+  position: relative;
+  top: 0.1em;
 }
 
 #prompt {
@@ -229,3 +233,4 @@ body::before {
   font-family: 'Terminal';
   src: local('Courier New');
 }
+
