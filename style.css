@@ -1,11 +1,23 @@
 /* style.css */
 body {
   margin: 0;
-  background: radial-gradient(circle, #0d001a, #000000);
+  background: #000;
+  background-image: repeating-linear-gradient(180deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 4px), repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 4px);
+  background-color: #0d001a;
   height: 100vh;
   font-family: 'Share Tech Mono', monospace;
   overflow: hidden;
   cursor: auto;
+  animation: glitch-bg 1s infinite steps(2, jump-none);
+}
+
+@keyframes glitch-bg {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 5px 5px;
+  }
 }
 
 #boot {
@@ -14,12 +26,12 @@ body {
   align-items: center;
   text-align: left;
   height: 100vh;
-  color: #4b0082; /* darker purple */
+  color: #00ffee; /* restored original turquoise */
   font-size: 1.2rem;
   white-space: pre-wrap;
   padding: 2rem;
   animation: flicker 0.3s infinite;
-  background: linear-gradient(145deg, #0c0020, #1a0033);
+  background: transparent;
   position: absolute;
   top: 0;
   left: 0;
@@ -32,7 +44,7 @@ body {
 #cursor {
   display: inline-block;
   width: 1ch;
-  background: #4b0082;
+  background: #00ffee;
   animation: blink 0.8s step-end infinite;
   margin-left: 2px;
 }
