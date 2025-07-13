@@ -37,14 +37,21 @@ function showMain() {
   const main = document.getElementById('main');
   main.classList.add('fade-in');
   bootSound.play();
+
+  const titleEl = document.getElementById("title");
+  titleEl.classList.add("glitch");
+
   typeDynamic("cyberevy", "title", 100, () => {
-    typeDynamic("ethical hacker, i break systems for fun, legally!", "subtitle", 30);
+    typeDynamic("ethical hacker, i break systems for fun, legally!", "subtitle", 30, () => {
+      typeDynamic("cyberevy@core:~$", "prompt", 50);
+    });
   });
 }
 
 function typeDynamic(text, targetId, speed, callback) {
   const el = document.getElementById(targetId);
   let i = 0;
+  el.innerHTML = '';
   function type() {
     if (i < text.length) {
       el.innerHTML += text[i++];
@@ -57,4 +64,8 @@ function typeDynamic(text, targetId, speed, callback) {
 }
 
 typeLine();
-document.addEventListener('keydown', showMain);
+
+document.addEventListener('keydown', function handleKey(e) {
+  document.removeEventListener('keydown', handleKey);
+  showMain();
+});
