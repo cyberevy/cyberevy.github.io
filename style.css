@@ -1,187 +1,91 @@
-/* style.css */
-body {
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-  background: #000;
-  position: relative;
-  cursor: auto;
-  font-family: 'Share Tech Mono', monospace;
-  background-color: #0d001a;
-}
+// script.js
+const bootLines = [
+  "booting cyberevy://_system",
+  "> Initializing terminal...",
+  "> Establishing uplink...",
+  "> Access granted [OK]",
+  "> Loading interface ███████████████ 100%",
+  "\nSystem ready. Press any key to enter..."
+];
 
-/* GLITCHY CUBE GRID ANIMATION FOR BOOT PAGE */
-#boot::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(#330066 1px, transparent 1px), radial-gradient(#220033 1px, transparent 1px);
-  background-size: 40px 40px, 40px 40px;
-  background-position: 0 0, 20px 20px;
-  animation: moveGrid 4s linear infinite;
-  opacity: 0.1;
-  z-index: 0;
-}
+const bootTextEl = document.getElementById('boot-text');
+const cursor = document.getElementById('cursor');
+const beep = document.getElementById('beep');
+const bootSound = document.getElementById('boot-sound');
 
-@keyframes moveGrid {
-  0% {
-    background-position: 0 0, 20px 20px;
+let line = 0;
+let char = 0;
+let booting = true;
+
+function typeLine() {
+  if (line < bootLines.length) {
+    if (char < bootLines[line].length) {
+      bootTextEl.innerHTML += bootLines[line][char++];
+      beep.currentTime = 0;
+      beep.play();
+      setTimeout(typeLine, 20);
+    } else {
+      bootTextEl.innerHTML += '\n';
+      line++;
+      char = 0;
+      setTimeout(typeLine, 400);
+    }
+  } else {
+    document.addEventListener('keydown', showMain, { once: true });
   }
-  100% {
-    background-position: 40px 40px, 60px 60px;
+}
+
+function showMain() {
+  document.getElementById('boot').style.display = 'none';
+  const main = document.getElementById('main');
+  main.classList.add('fade-in');
+  bootSound.play();
+
+  const titleEl = document.getElementById("title");
+  titleEl.classList.add("glitch");
+
+  typeDynamic("cyberevy", "title", 100, () => {
+    typeDynamic("ethical hacker, I break systems for fun, legally!", "subtitle", 30);
+  });
+
+  // Set up terminal command handler
+  const terminalInput = document.getElementById("terminal-input");
+  terminalInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const cmd = terminalInput.value.trim().toLowerCase();
+      switch (cmd) {
+        case "about":
+          window.location.href = "about.html";
+          break;
+        case "projects":
+          window.location.href = "projects.html";
+          break;
+        case "contact":
+          window.location.href = "contact.html";
+          break;
+        case "":
+          break;
+        default:
+          alert("Command not found: " + cmd);
+      }
+      terminalInput.value = "";
+    }
+  });
+}
+
+function typeDynamic(text, targetId, speed, callback) {
+  const el = document.getElementById(targetId);
+  let i = 0;
+  el.innerHTML = '';
+  function type() {
+    if (i < text.length) {
+      el.innerHTML += text[i++];
+      setTimeout(type, speed);
+    } else if (callback) {
+      callback();
+    }
   }
+  type();
 }
 
-#boot-video-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-  opacity: 0.50;
-  pointer-events: none;
-}
-
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    180deg,
-    rgba(255,255,255,0.02) 0,
-    rgba(255,255,255,0.02) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes glitchBG {
-  0% { background-position: 0 0; filter: hue-rotate(0deg); }
-  25% { filter: hue-rotate(5deg) blur(0.5px); }
-  50% { background-position: -10px -10px; filter: hue-rotate(0deg); }
-  75% { filter: hue-rotate(-5deg) blur(0.5px); }
-  100% { background-position: 0 0; filter: hue-rotate(0deg); }
-}
-
-#boot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: left;
-  height: 100vh;
-  color: #00ffee;
-  font-size: 1.2rem;
-  white-space: pre-wrap;
-  padding: 2rem;
-  animation: flicker 0.3s infinite;
-  background: transparent;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-#cursor {
-  display: inline-block;
-  width: 1ch;
-  background: #00ffee;
-  animation: blink 0.8s step-end infinite;
-  margin-left: 2px;
-}
-
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.9; }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-#main {
-  display: none;
-  width: 100vw;
-  height: 100vh;
-  background: url('background.jpg') no-repeat center center/cover;
-  opacity: 0;
-  transition: opacity 2s ease-in-out;
-  position: relative;
-}
-
-#main.fade-in {
-  display: block;
-  opacity: 1;
-}
-
-.overlay {
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #00ffee;
-}
-
-.title-glow {
-  font-size: 4rem;
-  color: #00ffee;
-  text-shadow: 0 0 10px cyan, 0 0 20px magenta;
-  animation: glow 2s infinite alternate;
-}
-
-.title-glow.glitch {
-  animation: glitch 0.3s infinite;
-}
-
-@keyframes glitch {
-  0% { text-shadow: 2px 0 magenta, -2px 0 cyan; }
-  20% { text-shadow: -2px -2px magenta, 2px 2px cyan; }
-  40% { text-shadow: 2px 2px magenta, -2px -2px cyan; }
-  60% { text-shadow: -2px 2px magenta, 2px -2px cyan; }
-  80% { text-shadow: 2px 0 magenta, -2px 0 cyan; }
-  100% { text-shadow: 0 0 10px cyan, 0 0 20px magenta; }
-}
-
-.subtitle {
-  font-size: 1.4rem;
-  margin-top: 1rem;
-  color: #66ffff;
-  text-shadow: 0 0 5px #33cccc;
-  animation: fadein 3s ease-out forwards;
-}
-
-@keyframes glow {
-  from { text-shadow: 0 0 10px cyan, 0 0 5px magenta; }
-  to   { text-shadow: 0 0 20px cyan, 0 0 10px magenta; }
-}
-
-@keyframes fadein {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-#prompt::after {
-  content: '_';
-  animation: blink 1s step-end infinite;
-  margin-left: 5px;
-}
-
-@font-face {
-  font-family: 'Terminal';
-  src: local('Courier New');
-}
+typeLine();
