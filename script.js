@@ -42,7 +42,7 @@ function showMain() {
   titleEl.classList.add("glitch");
 
   typeDynamic("cyberevy", "title", 100, () => {
-    typeDynamic("ethical hacker, i break systems for fun, legally!", "subtitle", 30, () => {
+    typeDynamic("ethical hacker, I break systems for fun, legally!", "subtitle", 30, () => {
       typeDynamic("cyberevy@core:~$", "prompt", 50);
     });
   });
