@@ -1,7 +1,6 @@
 // script.js
 let vantaEffect = null;
 
-// Load VANTA effect on boot screen with custom values
 window.addEventListener('DOMContentLoaded', () => {
   vantaEffect = VANTA.HALO({
     el: "#boot",
@@ -23,11 +22,11 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 const bootLines = [
-  "booting cyberevy://_system",
+  "booting sh3h4cks://_system",
   "> Initializing terminal...",
   "> Establishing uplink...",
   "> Access granted [OK]",
-  "> Loading interface ███████████████ 100%",
+  "> Loading interface █████████████████████ 100%",
   "\nSystem ready. Press any key to enter..."
 ];
 
@@ -70,8 +69,8 @@ function showMain() {
   typeDynamic("cyberevy", "title", 100, () => {
     typeDynamic("ethical hacker, I break systems for fun, legally!", "subtitle", 30, () => {
       const prompt = document.getElementById("prompt");
-      prompt.style.display = "block";
-      typeDynamic("cyberevy@core:~$", "prompt", 50);
+      prompt.innerHTML = 'sh3h4cks@core:~$ <input id="terminal-input" type="text" autocomplete="off">';
+      setupTerminalInput();
     });
   });
 }
@@ -89,6 +88,26 @@ function typeDynamic(text, targetId, speed, callback) {
     }
   }
   type();
+}
+
+function setupTerminalInput() {
+  const input = document.getElementById("terminal-input");
+  const prompt = document.getElementById("prompt");
+  input.focus();
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const cmd = input.value.trim().toLowerCase();
+      const output = document.createElement('div');
+      output.className = 'terminal-output';
+      if (["about", "projects", "contact"].includes(cmd)) {
+        window.location.href = cmd + ".html";
+      } else if (cmd !== '') {
+        output.innerText = `sh3h4cks@core:~$ ${cmd}\nCommand not found: ${cmd}`;
+        prompt.parentNode.insertBefore(output, prompt);
+        input.value = '';
+      }
+    }
+  });
 }
 
 typeLine();
