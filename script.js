@@ -66,7 +66,7 @@ function showMain() {
   const titleEl = document.getElementById("title");
   titleEl.classList.add("glitch");
 
-  typeDynamic("cyberevy", "title", 100, () => {
+  typeDynamic("sh3h4cks", "title", 100, () => {
     typeDynamic("ethical hacker, I break systems for fun, legally!", "subtitle", 30, () => {
       const prompt = document.getElementById("prompt");
       prompt.innerHTML = 'sh3h4cks@core:~$ <input id="terminal-input" type="text" autocomplete="off">';
