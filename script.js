@@ -1,5 +1,5 @@
 // script.js
-const skipBoot = window.location.hash === "#terminal" && document.referrer.includes("html");
+const skipBoot = window.location.hash === "#terminal";
 
 let vantaEffect = null;
 
@@ -24,12 +24,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (skipBoot) {
     showMain();
+    history.replaceState(null, null, "index.html");
   } else {
     typeLine();
 
     document.addEventListener('keydown', function handleKey(e) {
       document.removeEventListener('keydown', handleKey);
       showMain();
+      history.replaceState(null, null, "index.html");
     });
   }
 });
@@ -39,7 +41,7 @@ const bootLines = [
   "> Initializing terminal...",
   "> Establishing uplink...",
   "> Access granted [OK]",
-  "> Loading interface ██████████████████████████████ 100%",
+  "> Loading interface ██████████████████████████████████████ 100%",
   "\nSystem ready. Press any key to enter..."
 ];
 
