@@ -1,5 +1,5 @@
 // script.js
-const skipBoot = window.location.hash === "#terminal";
+const skipBoot = window.location.hash === "#terminal" && document.referrer.includes("html");
 
 let vantaEffect = null;
 
