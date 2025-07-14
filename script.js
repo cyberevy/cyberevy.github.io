@@ -1,8 +1,4 @@
-// Updated script.js
 let vantaEffect = null;
-
-const urlParams = new URLSearchParams(window.location.search);
-const skipBoot = urlParams.get("skipBoot") === "true";
 
 window.addEventListener('DOMContentLoaded', () => {
   vantaEffect = VANTA.HALO({
@@ -22,16 +18,6 @@ window.addEventListener('DOMContentLoaded', () => {
     scale: 1.0,
     scaleMobile: 1.0
   });
-
-  if (skipBoot) {
-    showMain();
-  } else {
-    typeLine();
-    document.addEventListener('keydown', function handleKey(e) {
-      document.removeEventListener('keydown', handleKey);
-      showMain();
-    });
-  }
 });
 
 const bootLines = [
@@ -112,9 +98,8 @@ function setupTerminalInput() {
       const cmd = input.value.trim().toLowerCase();
       const output = document.createElement('div');
       output.className = 'terminal-output';
-
       if (["about", "projects", "contact"].includes(cmd)) {
-        window.location.href = `${cmd}.html?skipBoot=true`;
+        window.location.href = cmd + ".html";
       } else if (cmd !== '') {
         output.innerText = `sh3h4cks@core:~$ ${cmd}\nCommand not found: ${cmd}`;
         prompt.parentNode.insertBefore(output, prompt);
@@ -123,3 +108,10 @@ function setupTerminalInput() {
     }
   });
 }
+
+typeLine();
+
+document.addEventListener('keydown', function handleKey(e) {
+  document.removeEventListener('keydown', handleKey);
+  showMain();
+});
