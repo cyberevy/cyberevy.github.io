@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sh3h4cks // Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Share Tech Mono', monospace;
+      background: url('background.jpg') no-repeat center center/cover;
+      color: #00ffee;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+    }
+
+    .terminal {
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 2rem;
+      border: 2px solid #00ffee;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 0 20px #00ffee;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px cyan;
+    }
+
+    .command {
+      color: #66ffff;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    .command:hover {
+      text-decoration: underline;
+    }
+
+    .output {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed #33cccc;
+    }
+
+    .back-link {
+      margin-top: 2rem;
+      display: inline-block;
+      color: #00ffee;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <h1>sh3h4cks@core:~$ cd projects</h1>
+    <p>Available Projects:</p>
+
+    <div class="command" onclick="showProject('discord')">
+      ➤ Discord-Inspired Credential Capture Lab (Red Team Simulation)
+    </div>
+
+    <div id="output" class="output"></div>
+    <a href="index.html" class="back-link">cd /</a>
+  </div>
+
+  <script>
+    function showProject(project) {
+      const out = document.getElementById('output');
+      if (project === 'discord') {
+        out.innerHTML = `
+          <h2>Discord-Inspired Credential Capture Lab</h2>
+          <p>This red team lab simulates a phishing attack using a Discord-inspired login page to capture user credentials.</p>
+          <ul>
+            <li>✅ Custom HTML spoofed login form</li>
+            <li>✅ Data logged locally via Flask and written to <code>creds.txt</code></li>
+            <li>📸 Includes screenshots and fake target environment</li>
+            <li>⚠️ For educational use only</li>
+          </ul>
+          <p><a href="discord-harvester/index.html">🔗 Open Project</a></p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
