@@ -4,6 +4,30 @@ const skipBoot = window.location.hash === "#terminal";
 let vantaEffect = null;
 
 window.addEventListener('DOMContentLoaded', () => {
+  const bootTextEl = document.getElementById('boot-text');
+  const cursor = document.getElementById('cursor');
+  const beep = document.getElementById('beep');
+  const bootSound = document.getElementById('boot-sound');
+
+  let line = 0;
+  let char = 0;
+
+  function typeLine() {
+    if (line < bootLines.length) {
+      if (char < bootLines[line].length) {
+        bootTextEl.innerHTML += bootLines[line][char++];
+        beep.currentTime = 0;
+        beep.play();
+        setTimeout(typeLine, 20);
+      } else {
+        bootTextEl.innerHTML += '\n';
+        line++;
+        char = 0;
+        setTimeout(typeLine, 400);
+      }
+    }
+  }
+
   vantaEffect = VANTA.HALO({
     el: "#boot",
     mouseControls: true,
@@ -45,30 +69,6 @@ const bootLines = [
   "\nSystem ready. Press any key to enter..."
 ];
 
-const bootTextEl = document.getElementById('boot-text');
-const cursor = document.getElementById('cursor');
-const beep = document.getElementById('beep');
-const bootSound = document.getElementById('boot-sound');
-
-let line = 0;
-let char = 0;
-
-function typeLine() {
-  if (line < bootLines.length) {
-    if (char < bootLines[line].length) {
-      bootTextEl.innerHTML += bootLines[line][char++];
-      beep.currentTime = 0;
-      beep.play();
-      setTimeout(typeLine, 20);
-    } else {
-      bootTextEl.innerHTML += '\n';
-      line++;
-      char = 0;
-      setTimeout(typeLine, 400);
-    }
-  }
-}
-
 function showMain() {
   if (vantaEffect && typeof vantaEffect.destroy === 'function') {
     vantaEffect.destroy();
@@ -76,7 +76,7 @@ function showMain() {
   document.getElementById('boot').style.display = 'none';
   const main = document.getElementById('main');
   main.classList.add('fade-in');
-  bootSound.play().catch(() => {});
+  document.getElementById('boot-sound').play().catch(() => {});
 
   const titleEl = document.getElementById("title");
   titleEl.classList.add("glitch");
