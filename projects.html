@@ -80,7 +80,7 @@
     </div>
 
     <div id="output" class="output"></div>
-    <div class="back-link" onclick="clearOutput()">cd /</div>
+    <div class="back-link" onclick="clearOutput()">sh3h4cks@core:~$ cd /</div>
   </div>
 
   <script>
@@ -139,7 +139,8 @@ if __name__ == '__main__':
     }
 
     function clearOutput() {
-      document.getElementById('output').innerHTML = '';
+      const out = document.getElementById('output');
+      out.innerHTML = '';
     }
   </script>
 </body>
