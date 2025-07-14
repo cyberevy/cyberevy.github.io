@@ -1,42 +1,7 @@
-// script.js
-const skipBoot = window.location.hash === "#terminal" && document.referrer.includes(".html");
-
+// ORIGINAL script.js
 let vantaEffect = null;
-let bootTextEl, cursor, beep, bootSound;
-let line = 0;
-let char = 0;
-
-const bootLines = [
-  "booting sh3h4cks://_system",
-  "> Initializing terminal...",
-  "> Establishing uplink...",
-  "> Access granted [OK]",
-  "> Loading interface ██████████████████████████████████████ 100%",
-  "\nSystem ready. Press any key to enter..."
-];
 
 window.addEventListener('DOMContentLoaded', () => {
-  bootTextEl = document.getElementById('boot-text');
-  cursor = document.getElementById('cursor');
-  beep = document.getElementById('beep');
-  bootSound = document.getElementById('boot-sound');
-
-  function typeLine() {
-    if (line < bootLines.length) {
-      if (char < bootLines[line].length) {
-        bootTextEl.innerHTML += bootLines[line][char++];
-        beep.currentTime = 0;
-        beep.play();
-        setTimeout(typeLine, 20);
-      } else {
-        bootTextEl.innerHTML += '\n';
-        line++;
-        char = 0;
-        setTimeout(typeLine, 400);
-      }
-    }
-  }
-
   vantaEffect = VANTA.HALO({
     el: "#boot",
     mouseControls: true,
@@ -54,20 +19,40 @@ window.addEventListener('DOMContentLoaded', () => {
     scale: 1.0,
     scaleMobile: 1.0
   });
-
-  if (skipBoot) {
-    showMain();
-    history.replaceState(null, null, "index.html");
-  } else {
-    typeLine();
-
-    document.addEventListener('keydown', function handleKey(e) {
-      document.removeEventListener('keydown', handleKey);
-      showMain();
-      history.replaceState(null, null, "index.html");
-    });
-  }
 });
+
+const bootLines = [
+  "booting sh3h4cks://_system",
+  "> Initializing terminal...",
+  "> Establishing uplink...",
+  "> Access granted [OK]",
+  "> Loading interface █████████████████████ 100%",
+  "\nSystem ready. Press any key to enter..."
+];
+
+const bootTextEl = document.getElementById('boot-text');
+const cursor = document.getElementById('cursor');
+const beep = document.getElementById('beep');
+const bootSound = document.getElementById('boot-sound');
+
+let line = 0;
+let char = 0;
+
+function typeLine() {
+  if (line < bootLines.length) {
+    if (char < bootLines[line].length) {
+      bootTextEl.innerHTML += bootLines[line][char++];
+      beep.currentTime = 0;
+      beep.play();
+      setTimeout(typeLine, 20);
+    } else {
+      bootTextEl.innerHTML += '\n';
+      line++;
+      char = 0;
+      setTimeout(typeLine, 400);
+    }
+  }
+}
 
 function showMain() {
   if (vantaEffect && typeof vantaEffect.destroy === 'function') {
@@ -76,26 +61,18 @@ function showMain() {
   document.getElementById('boot').style.display = 'none';
   const main = document.getElementById('main');
   main.classList.add('fade-in');
-  bootSound.play().catch(() => {});
+  bootSound.play();
 
   const titleEl = document.getElementById("title");
   titleEl.classList.add("glitch");
 
   typeDynamic("sh3h4cks", "title", 100, () => {
     typeDynamic("ethical hacker, I break systems for fun, legally!", "subtitle", 30, () => {
-      appendNewPrompt();
+      const prompt = document.getElementById("prompt");
+      prompt.innerHTML = 'sh3h4cks@core:~$ <input id="terminal-input" type="text" autocomplete="off">';
       setupTerminalInput();
     });
   });
-}
-
-function appendNewPrompt() {
-  const prompt = document.getElementById("prompt");
-  const wrapper = document.createElement("div");
-  wrapper.className = "terminal-line";
-  wrapper.innerHTML = 'sh3h4cks@core:~$ <input id="terminal-input" type="text" autocomplete="off">';
-  prompt.innerHTML = "";
-  prompt.appendChild(wrapper);
 }
 
 function typeDynamic(text, targetId, speed, callback) {
@@ -133,3 +110,9 @@ function setupTerminalInput() {
   });
 }
 
+typeLine();
+
+document.addEventListener('keydown', function handleKey(e) {
+  document.removeEventListener('keydown', handleKey);
+  showMain();
+});
