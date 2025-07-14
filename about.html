@@ -10,17 +10,51 @@
       margin: 0;
       height: 100vh;
       font-family: 'Share Tech Mono', monospace;
-      background: radial-gradient(ellipse at center, #0d001a 0%, #000000 100%);
+      background: url('background.jpg') no-repeat center center/cover;
       color: #00ffee;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 2rem;
       text-align: center;
+      animation: glitchBG 3s infinite alternate;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.02) 0,
+        rgba(255,255,255,0.02) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes glitchBG {
+      0% { filter: hue-rotate(0deg); }
+      25% { filter: hue-rotate(5deg) blur(0.5px); }
+      50% { filter: hue-rotate(0deg); }
+      75% { filter: hue-rotate(-5deg) blur(0.5px); }
+      100% { filter: hue-rotate(0deg); }
     }
 
     .container {
       max-width: 800px;
+      position: relative;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.65);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ffee;
     }
 
     h1 {
@@ -44,6 +78,18 @@
     a:hover {
       text-decoration: underline;
     }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      font-size: 1rem;
+      color: #00ffee;
+      text-shadow: 0 0 5px #33cccc;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -53,6 +99,7 @@
     <p>I have a deep passion for hacking, red teaming, and uncovering the hidden layers of systems. My curiosity fuels my drive to continuously learn and improve in offensive security.</p>
     <p>I specialize in ethical hacking practices and enjoy participating in capture-the-flag competitions where I solve real-world cybersecurity challenges.</p>
     <p>If you'd like to connect or collaborate, check out my <a href="https://www.linkedin.com/in/olivia-elena-hutu-234420357/" target="_blank">LinkedIn</a>.</p>
+    <p><a class="back-link" href="index.html">cd /</a></p>
   </div>
 </body>
 </html>
