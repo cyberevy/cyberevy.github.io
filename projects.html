@@ -26,6 +26,8 @@
       width: 90%;
       max-width: 800px;
       box-shadow: 0 0 20px #00ffee;
+      overflow-y: auto;
+      max-height: 90vh;
     }
 
     h1 {
@@ -54,6 +56,17 @@
       margin-top: 2rem;
       display: inline-block;
       color: #00ffee;
+      cursor: pointer;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    img {
+      max-width: 100%;
+      margin-top: 10px;
+      border: 1px solid #33cccc;
     }
   </style>
 </head>
@@ -63,11 +76,11 @@
     <p>Available Projects:</p>
 
     <div class="command" onclick="showProject('discord')">
-      ➤ Discord-Inspired Credential Capture Lab (Red Team Simulation)
+      ➤ Discord-Inspired Credential Harvester (Red Team Simulation)
     </div>
 
     <div id="output" class="output"></div>
-    <a href="index.html" class="back-link">cd /</a>
+    <div class="back-link" onclick="clearOutput()">cd /</div>
   </div>
 
   <script>
@@ -75,18 +88,60 @@
       const out = document.getElementById('output');
       if (project === 'discord') {
         out.innerHTML = `
-          <h2>Discord-Inspired Credential Capture Lab</h2>
-          <p>This red team lab simulates a phishing attack using a Discord-inspired login page to capture user credentials.</p>
-          <ul>
-            <li>✅ Custom HTML spoofed login form</li>
-            <li>✅ Data logged locally via Flask and written to <code>creds.txt</code></li>
-            <li>📸 Includes screenshots and fake target environment</li>
-            <li>⚠️ For educational use only</li>
-          </ul>
-          <p><a href="discord-harvester/index.html">🔗 Open Project</a></p>
+          <h2>Discord-Inspired Credential Harvester</h2>
+          <p><strong>Part 1:</strong> The purpose of this project was to demonstrate how credential harvesting attacks can be simulated in a red team or educational environment, using a spoofed login page and simple form handling logic in Flask. I navigated to the login page of the original app and saved its structure by using the "Save as" feature. The goal is to highlight how minimal technical effort is required to build a realistic phishing page when mimicking a well-known application and only basic coding knowledge.</p>
+
+          <img src="assets/projects/phishing/tree.jpg" alt="Folder Structure">
+
+          <p>Screenshot one shows the folder structure needed in order to make our page work. Initially, I created the Python Flask code and a .txt document called creds.txt.</p>
+
+          <pre><code>from flask import Flask, render_template, request, redirect
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        with open("creds.txt", "a") as f:
+            f.write(f"Username: {username} | Password: {password}\n")
+
+        return redirect("https://http.cat/418")
+
+    return render_template('login.html')
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000)</code></pre>
+
+          <p>Essentially this gets the username and password from the POST request and saves them in my creds.txt document. Afterwards, it redirects the user to a funny cat image, but normally in red teaming attacks we would be redirected to the real website.</p>
+
+          <h3>Part 2:</h3>
+          <p>After modifying the HTML code, I made sure it no longer uses official logos, trademarks, or direct references to the original application for legal and ethical reasons. In a real phishing campaign, attackers usually aim to replicate the original site as closely as possible, often keeping the same logos, styling, and layout to trick the user.</p>
+
+          <img src="assets/projects/phishing/server_run.jpg" alt="Flask Server Run">
+          <img src="assets/projects/phishing/initial_login.jpg" alt="Login Page">
+
+          <p>I added a QR code to the page, which in this simulation is fake and doesn't lead anywhere. However, in a real campaign, this QR could redirect the user to the original site. Once the site is hosted through Flask, it becomes accessible locally, and attackers could make it public using a VPS and domains that mimic the target application.</p>
+
+          <h3>Part 3:</h3>
+          <p>The victim will now enter their credentials and be redirected to the page containing the cat image. However, in a real-life scenario, they would be redirected to the legitimate login page of the web app used in the phishing campaign. This seamless redirection helps maintain the illusion that nothing suspicious occurred. Meanwhile, the credentials they entered would be silently saved on my machine in the creds.txt file, allowing me to harvest the information without alerting the user.</p>
+
+          <img src="assets/projects/phishing/user_insert_creds.jpg" alt="Form Test">
+          <img src="assets/projects/phishing/redirect.jpg" alt="Redirect Cat">
+          <img src="assets/projects/phishing/creds.jpg" alt="Credentials Log">
+
+          <h3>Conclusion</h3>
+          <p>This red team simulation demonstrates how credential harvesting works, and how quickly a phishing page can be built with basic technical knowledge. The goal is purely educational and designed to raise awareness about how easily users can be deceived into giving up credentials.</p>
         `;
       }
+    }
+
+    function clearOutput() {
+      document.getElementById('output').innerHTML = '';
     }
   </script>
 </body>
 </html>
+
