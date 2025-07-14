@@ -2,31 +2,40 @@
 const skipBoot = window.location.hash === "#terminal";
 
 let vantaEffect = null;
+let bootTextEl, cursor, beep, bootSound;
+let line = 0;
+let char = 0;
 
-window.addEventListener('DOMContentLoaded', () => {
-  const bootTextEl = document.getElementById('boot-text');
-  const cursor = document.getElementById('cursor');
-  const beep = document.getElementById('beep');
-  const bootSound = document.getElementById('boot-sound');
+const bootLines = [
+  "booting sh3h4cks://_system",
+  "> Initializing terminal...",
+  "> Establishing uplink...",
+  "> Access granted [OK]",
+  "> Loading interface ██████████████████████████████████████ 100%",
+  "\nSystem ready. Press any key to enter..."
+];
 
-  let line = 0;
-  let char = 0;
-
-  function typeLine() {
-    if (line < bootLines.length) {
-      if (char < bootLines[line].length) {
-        bootTextEl.innerHTML += bootLines[line][char++];
-        beep.currentTime = 0;
-        beep.play();
-        setTimeout(typeLine, 20);
-      } else {
-        bootTextEl.innerHTML += '\n';
-        line++;
-        char = 0;
-        setTimeout(typeLine, 400);
-      }
+function typeLine() {
+  if (line < bootLines.length) {
+    if (char < bootLines[line].length) {
+      bootTextEl.innerHTML += bootLines[line][char++];
+      beep.currentTime = 0;
+      beep.play();
+      setTimeout(typeLine, 20);
+    } else {
+      bootTextEl.innerHTML += '\n';
+      line++;
+      char = 0;
+      setTimeout(typeLine, 400);
     }
   }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  bootTextEl = document.getElementById('boot-text');
+  cursor = document.getElementById('cursor');
+  beep = document.getElementById('beep');
+  bootSound = document.getElementById('boot-sound');
 
   vantaEffect = VANTA.HALO({
     el: "#boot",
@@ -60,15 +69,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-const bootLines = [
-  "booting sh3h4cks://_system",
-  "> Initializing terminal...",
-  "> Establishing uplink...",
-  "> Access granted [OK]",
-  "> Loading interface ██████████████████████████████████████ 100%",
-  "\nSystem ready. Press any key to enter..."
-];
-
 function showMain() {
   if (vantaEffect && typeof vantaEffect.destroy === 'function') {
     vantaEffect.destroy();
@@ -76,7 +76,7 @@ function showMain() {
   document.getElementById('boot').style.display = 'none';
   const main = document.getElementById('main');
   main.classList.add('fade-in');
-  document.getElementById('boot-sound').play().catch(() => {});
+  bootSound.play().catch(() => {});
 
   const titleEl = document.getElementById("title");
   titleEl.classList.add("glitch");
