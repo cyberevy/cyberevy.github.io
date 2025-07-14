@@ -1,4 +1,6 @@
 // script.js
+const skipBoot = window.location.hash === "#terminal";
+
 let vantaEffect = null;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +21,17 @@ window.addEventListener('DOMContentLoaded', () => {
     scale: 1.0,
     scaleMobile: 1.0
   });
+
+  if (skipBoot) {
+    showMain();
+  } else {
+    typeLine();
+
+    document.addEventListener('keydown', function handleKey(e) {
+      document.removeEventListener('keydown', handleKey);
+      showMain();
+    });
+  }
 });
 
 const bootLines = [
@@ -26,7 +39,7 @@ const bootLines = [
   "> Initializing terminal...",
   "> Establishing uplink...",
   "> Access granted [OK]",
-  "> Loading interface █████████████████████ 100%",
+  "> Loading interface ██████████████████████████████ 100%",
   "\nSystem ready. Press any key to enter..."
 ];
 
@@ -61,7 +74,7 @@ function showMain() {
   document.getElementById('boot').style.display = 'none';
   const main = document.getElementById('main');
   main.classList.add('fade-in');
-  bootSound.play();
+  bootSound.play().catch(() => {});
 
   const titleEl = document.getElementById("title");
   titleEl.classList.add("glitch");
@@ -109,10 +122,3 @@ function setupTerminalInput() {
     }
   });
 }
-
-typeLine();
-
-document.addEventListener('keydown', function handleKey(e) {
-  document.removeEventListener('keydown', handleKey);
-  showMain();
-});
