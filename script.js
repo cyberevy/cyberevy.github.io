@@ -15,27 +15,27 @@ const bootLines = [
   "\nSystem ready. Press any key to enter..."
 ];
 
-function typeLine() {
-  if (line < bootLines.length) {
-    if (char < bootLines[line].length) {
-      bootTextEl.innerHTML += bootLines[line][char++];
-      beep.currentTime = 0;
-      beep.play();
-      setTimeout(typeLine, 20);
-    } else {
-      bootTextEl.innerHTML += '\n';
-      line++;
-      char = 0;
-      setTimeout(typeLine, 400);
-    }
-  }
-}
-
 window.addEventListener('DOMContentLoaded', () => {
   bootTextEl = document.getElementById('boot-text');
   cursor = document.getElementById('cursor');
   beep = document.getElementById('beep');
   bootSound = document.getElementById('boot-sound');
+
+  function typeLine() {
+    if (line < bootLines.length) {
+      if (char < bootLines[line].length) {
+        bootTextEl.innerHTML += bootLines[line][char++];
+        beep.currentTime = 0;
+        beep.play();
+        setTimeout(typeLine, 20);
+      } else {
+        bootTextEl.innerHTML += '\n';
+        line++;
+        char = 0;
+        setTimeout(typeLine, 400);
+      }
+    }
+  }
 
   vantaEffect = VANTA.HALO({
     el: "#boot",
@@ -83,11 +83,19 @@ function showMain() {
 
   typeDynamic("sh3h4cks", "title", 100, () => {
     typeDynamic("ethical hacker, I break systems for fun, legally!", "subtitle", 30, () => {
-      const prompt = document.getElementById("prompt");
-      prompt.innerHTML = 'sh3h4cks@core:~$ <input id="terminal-input" type="text" autocomplete="off">';
+      appendNewPrompt();
       setupTerminalInput();
     });
   });
+}
+
+function appendNewPrompt() {
+  const prompt = document.getElementById("prompt");
+  const wrapper = document.createElement("div");
+  wrapper.className = "terminal-line";
+  wrapper.innerHTML = 'sh3h4cks@core:~$ <input id="terminal-input" type="text" autocomplete="off">';
+  prompt.innerHTML = "";
+  prompt.appendChild(wrapper);
 }
 
 function typeDynamic(text, targetId, speed, callback) {
@@ -124,3 +132,4 @@ function setupTerminalInput() {
     }
   });
 }
+
