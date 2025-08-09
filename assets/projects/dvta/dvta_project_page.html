@@ -11,7 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     :root{ --neon:#00ffee; --code:#00ff66; }
-    body { margin:0; font-family:'Share Tech Mono', monospace; background:#000 url('./background.jpg') no-repeat center/cover; color:var(--neon); padding:2rem; }
+    body {
+      margin:0;
+      font-family:'Share Tech Mono', monospace;
+      background:#000 url('/background.jpg') no-repeat center center / cover; /* <-- fixed */
+      color:var(--neon);
+      padding:2rem;
+    }
     .terminal{ background:rgba(0,0,0,.75); border:2px solid var(--neon); box-shadow:0 0 20px var(--neon); max-width:1000px; margin:auto; padding:2rem; }
     h1,h2,h3{ text-shadow:0 0 10px cyan; }
     p{ line-height:1.6; }
