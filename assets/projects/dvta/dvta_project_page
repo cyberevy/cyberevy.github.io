@@ -56,7 +56,7 @@
   <h2>Static Code Analysis (dnSpy)</h2>
   <p>With this in mind, we can now proceed with a static code analysis in dnSpy <a href="https://github.com/dnSpy/dnSpy">https://github.com/dnSpy/dnSpy</a>, which is a popular .NET decompiler. By loading the DVTA.exe binary into dnSpy, we can inspect the source code, review its classes and methods, and identify potential vulnerabilities.</p>
 
-  <img src="assets/projects/dvta/images/screenshot3.jpg" alt="dnSpy project tree">
+  <img src="assets/projects/dvta/images/screenshot4.jpg" alt="dnSpy project tree">
 
   <p>We can drag and drop our .exe file into the dnSpy tool and focus our attention on the login flow, database access and FTP backup handler.</p>
 
@@ -73,10 +73,11 @@
 }</pre>
 
   <p>If the user is not an admin, the application stores the username, password, email and isLoggedIn flag directly in the Windows Registry under <code class="inline">HKCU\\dvta</code>, which consequently means any local user or malware with access to the user profile can read or modify these values.</p>
+  <img src="assets/projects/dvta/images/screenshot5.jpg" alt="dnSpy project tree">
 
   <p>If a malicious actor gains access to the victim’s user session, they can query the registry to obtain the cleartext credentials of a non-admin user, providing them with an immediate foothold into the application.</p>
 
-  <img src="assets/projects/dvta/images/screenshot4.jpg" alt="Registry key HKCU dvta">
+  <img src="assets/projects/dvta/images/screenshot6.jpg" alt="Registry key HKCU dvta">
 
   <h3>Finding: Configure Server writes DBSERVER/FTPSERVER</h3>
   <p>When analyzing the <code class="inline">button1_Click</code> method in dnSpy, it was found that the application takes the server IP entered by the user, appends <code class="inline">\\SQLEXPRESS</code> for the SQL Server instance, and stores it in the application configuration under the key <code class="inline">DBSERVER</code>. Similarly it stores the FTP server address in the <code class="inline">FTPSERVER</code> key. Those values are saved in cleartext within the DVTA config file, which is stored locally on the file system, so any user can read and modify them.</p>
@@ -111,19 +112,19 @@
 
   <p>If an attacker is able to locate and modify the application’s configuration file, they can change the DBSERVER or FTPSERVER value to point to a server they control. This will cause the application to connect to the attacker’s system during normal operation, allowing it to capture hidden data.</p>
 
-  <img src="assets/projects/dvta/images/screenshot5.jpg" alt="DVTA config file showing DBSERVER FTPSERVER and AES values">
+  <img src="assets/projects/dvta/images/screenshot7.jpg" alt="DVTA config file showing DBSERVER FTPSERVER and AES values">
 
   <h3>Finding: Trivially recoverable DB password</h3>
   <p>The config file provides login credentials for both MSSQL and FTP servers also. <code class="inline">DBPASSWORD</code> is Base64 of AES-encrypted data, but the AES key (<code class="inline">AESKEY</code>) and IV (<code class="inline">IV</code>) are in the same config file. So the DB password is trivially recoverable (effective cleartext).</p>
 
   <p>Because FTPSERVER is writable in DVTA.exe.config and the client uses hardcoded FTP credentials, as we can see in dnSpy, an attacker who can edit the config can redirect exports to an attacker-controlled FTP server and receive <code class="inline">admin.csv</code> (all expenses) without needing to recover any secrets.</p>
 
-  <img src="assets/projects/dvta/images/screenshot5.jpg" alt="Config shows AES key and IV">
+  <img src="assets/projects/dvta/images/screenshot6.jpg" alt="Config shows AES key and IV">
 
   <h2>Privilege Restriction in the UI</h2>
   <p>However, when logging in with the normal user account “test” we do not have the option to Back up file to FTP.</p>
 
-  <img src="assets/projects/dvta/images/screenshot6.jpg" alt="Main form without FTP backup button">
+  <img src="assets/projects/dvta/images/screenshot8.jpg" alt="Main form without FTP backup button">
 
   <p>This restriction is enforced in <code class="inline">DVTA.Login.btnLogin_Click</code> where if the user <code class="inline">isadmin</code> the application launches the Admin form containing “Backup Data to FTP Server”; if not it launches the Main form which does not contain it (normal form above).</p>
 
@@ -159,8 +160,8 @@ $dec = $aes.CreateDecryptor().TransformFinalBlock($bytes,0,$bytes.Length)
 
   <p>The password is <code class="inline">p@ssw0rd</code>.</p>
 
-  <img src="assets/projects/dvta/images/screenshot7.jpg" alt="PowerShell decryption output">
-  <img src="assets/projects/dvta/images/screenshot8.jpg" alt="PowerShell console">
+  <img src="assets/projects/dvta/images/screenshot9.jpg" alt="PowerShell decryption output">
+  <img src="assets/projects/dvta/images/screenshot10.jpg" alt="PowerShell console">
 
   <h2>Database Extraction</h2>
   <p>We use this command to login into the DB and extract our credentials:</p>
@@ -169,16 +170,16 @@ $dec = $aes.CreateDecryptor().TransformFinalBlock($bytes,0,$bytes.Length)
 
   <p>And we successfully login as admin and have the option Backup Data to FTP server on</p>
 
-  <img src="assets/projects/dvta/images/screenshot9.jpg" alt="SQL results show users table">
+  <img src="assets/projects/dvta/images/screenshot11.jpg" alt="SQL results show users table">
 
   <h2>Alternative: Reverse Engineering Patch</h2>
   <p>This can also be done through reverse engineering and recompiling the code, in case we don’t have access to a configuration file or the IV and key are not present.</p>
 
-  <img src="assets/projects/dvta/images/screenshot10.jpg" alt="Editing in dnSpy">
+  <img src="assets/projects/dvta/images/screenshot12.jpg" alt="Editing in dnSpy">
 
   <p>We can press edit on the <code class="inline">btnLogin_Click</code> in the Login class and check the “isadmin != 1” block.</p>
 
-  <img src="assets/projects/dvta/images/screenshot11.jpg" alt="isadmin check block">
+  <img src="assets/projects/dvta/images/screenshot13.jpg" alt="isadmin check block">
 
   <p>Remove it and replace it with this:</p>
   <pre class="code">base.Hide();
@@ -189,14 +190,14 @@ Application.Exit();</pre>
 
   <p>We can then proceed with pressing compile, File → Save Module and choose to either overwrite the application or save a copy.</p>
 
-  <img src="assets/projects/dvta/images/screenshot12.jpg" alt="Compile and save module">
-  <img src="assets/projects/dvta/images/screenshot13.jpg" alt="Patched executable saved">
-  <img src="assets/projects/dvta/images/screenshot14.jpg" alt="Admin panel visible for normal user">
+  <img src="assets/projects/dvta/images/screenshot14.jpg" alt="Compile and save module">
+  <img src="assets/projects/dvta/images/screenshot15.jpg" alt="Patched executable saved">
+  <img src="assets/projects/dvta/images/screenshot16.jpg" alt="Admin panel visible for normal user">
 
   <h2>SQL Injection in Login</h2>
   <p>Yet if we explore the code further, we are able to see that in <code class="inline">DBAccessClass</code> there is a code flow that makes the login form exploitable to SQL injection.</p>
 
-  <img src="assets/projects/dvta/images/screenshot15.jpg" alt="Vulnerable login query">
+  <img src="assets/projects/dvta/images/screenshot17.jpg" alt="Vulnerable login query">
 
   <p>Here we can clearly see that whatever we type into the username and password fields is directly put into the SQL query, there is no escaping or parameters, which means that we can insert SQL code directly instead of the normal username.</p>
 
@@ -204,7 +205,7 @@ Application.Exit();</pre>
 
   <pre class="code">' OR 1=1--</pre>
 
-  <img src="assets/projects/dvta/images/screenshot16.jpg" alt="SQLi login success">
+  <img src="assets/projects/dvta/images/screenshot18.jpg" alt="SQLi login success">
 
   <h2>FTP Exfiltration</h2>
   <p>Now that we have access to the “magic” backup to FTP button we can try setting our own rogue FTP server, modify the configuration file to make the app connect to us and extract the secret information.</p>
@@ -228,8 +229,8 @@ FTPServer(('0.0.0.0', 21), h).serve_forever()</pre>
 
   <p>On the victim machine we either use our patched DVTA.exe to get the admin option or directly login as admin.</p>
 
-  <img src="assets/projects/dvta/images/screenshot17.jpg" alt="FTP server running">
-  <img src="assets/projects/dvta/images/screenshot18.jpg" alt="admin.csv exfiltrated on attacker FTP">
+  <img src="assets/projects/dvta/images/screenshot19.jpg" alt="FTP server running">
+  <img src="assets/projects/dvta/images/screenshot20.jpg" alt="admin.csv exfiltrated on attacker FTP">
 
   <p style="margin-top:1.5rem;"><a href="index.html#terminal">← Back to Projects</a></p>
 </div>
