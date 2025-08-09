@@ -173,9 +173,6 @@
   <h2>Privilege Restriction in the UI</h2>
   <p>However, when logging in with the normal user account “test” we do not have the option to Back up file to FTP.</p>
 
-  <!-- 9 -->
-  <img src="/assets/projects/dvta/images/screenshot9.jpg" alt="Main form without FTP backup button">
-
   <p>This restriction is enforced in <code class="inline">DVTA.Login.btnLogin_Click</code> where if the user <code class="inline">isadmin</code> the application launches the Admin form containing “Backup Data to FTP Server”; if not it launches the Main form which does not contain it (normal form above).</p>
 
   <pre class="code">if (isadmin != 1)
@@ -191,6 +188,7 @@ Application.Exit();</pre>
 
   <h2>Decrypting the Database Password</h2>
   <p>Hence we have the AES encrypted password along with the IV key and AES key; we can use PowerShell to decrypt the database password:</p>
+  <img src="/assets/projects/dvta/images/screenshot9.jpg" alt="Main form without FTP backup button">
 
   <pre class="code">$encB64 = "CTsvjZ0jQghXYWbSRcPxpQ=="
 $key    = [Text.Encoding]::ASCII.GetBytes("J8gLXc454o5tW2HEF7HahcXPufj9v8k8")
