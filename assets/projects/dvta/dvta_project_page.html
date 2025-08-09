@@ -220,13 +220,12 @@ $dec = $aes.CreateDecryptor().TransformFinalBlock($bytes,0,$bytes.Length)
 
   <p>And we successfully login as admin and have the option Backup Data to FTP server on</p>
 
-  <!-- 12 -->
-  <img src="/assets/projects/dvta/images/screenshot12.jpg" alt="SQL results show users table">
-
+  
   <h2>Alternative: Reverse Engineering Patch</h2>
   <p>This can also be done through reverse engineering and recompiling the code, in case we don’t have access to a configuration file or the IV and key are not present.</p>
-
-  <!-- 13 -->
+ 
+  <img src="/assets/projects/dvta/images/screenshot12.jpg" alt="SQL results show users table">
+<!-- 13 -->
   <img src="/assets/projects/dvta/images/screenshot13.jpg" alt="Editing in dnSpy">
 
   <p>We can press edit on the <code class="inline">btnLogin_Click</code> in the Login class and check the “isadmin != 1” block.</p>
