@@ -12,20 +12,53 @@
   <style>
     :root{ --neon:#00ffee; --code:#00ff66; }
     body {
-      margin:0;
-      font-family:'Share Tech Mono', monospace;
-      background:#000 url('/background.jpg') no-repeat center center / cover; /* <-- fixed */
-      color:var(--neon);
-      padding:2rem;
+      margin: 0;
+      font-family: 'Share Tech Mono', monospace;
+      background: url('/background.jpg') no-repeat center center/cover;
+      color: var(--neon);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
     }
-    .terminal{ background:rgba(0,0,0,.75); border:2px solid var(--neon); box-shadow:0 0 20px var(--neon); max-width:1000px; margin:auto; padding:2rem; }
-    h1,h2,h3{ text-shadow:0 0 10px cyan; }
-    p{ line-height:1.6; }
-    pre.code{ background:#001a00; color:var(--code); padding:1rem; border:1px solid #19c37d; border-radius:6px; overflow-x:auto; white-space:pre-wrap; word-wrap:break-word; }
-    code.inline{ background:rgba(0,40,0,.5); color:var(--code); padding:2px 6px; border:1px solid #19c37d; border-radius:4px; }
-    img{ max-width:100%; border:1px solid #33cccc; margin:.5rem 0 1rem; }
-    a{ color:var(--neon); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
+    .terminal {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 2rem;
+      border: 2px solid var(--neon);
+      width: 90%;
+      max-width: 1000px;
+      box-shadow: 0 0 20px var(--neon);
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    h1,h2,h3 { text-shadow: 0 0 10px cyan; }
+    p { line-height: 1.6; }
+    pre.code {
+      background: #001a00;
+      color: var(--code);
+      padding: 1rem;
+      border: 1px solid #19c37d;
+      border-radius: 6px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    code.inline {
+      background: rgba(0,40,0,.5);
+      color: var(--code);
+      padding: 2px 6px;
+      border: 1px solid #19c37d;
+      border-radius: 4px;
+    }
+    img {
+      max-width: 100%;
+      border: 1px solid #33cccc;
+      margin: .5rem 0 1rem;
+    }
+    a { color: var(--neon); text-decoration: none; }
+    a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
